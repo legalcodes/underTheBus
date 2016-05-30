@@ -1,8 +1,8 @@
 var express = require('express');
 var server = express();
 
-// var port = process.env.PORT || 3000;
-var port = 3000;
+var port = process.env.PORT || 3000;
+// var port = 3000;
 
 var morgan = require('morgan');
 var bodyParser = require('body-parser');

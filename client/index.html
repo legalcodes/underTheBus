@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>UnderTheBus</title>
+
+  <!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- My CSS -->
+  <link src="style.css"></script>
+
+
+	<!-- Angular -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+
+  <!-- Angular UI Router -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.0/angular-ui-router.min.js"></script>
+
+
+  <script type="text/javascript" src="UnderTheBus.js"></script>
+  <script type="text/javascript" src="subtitle.js"></script>
+
+  <!-- Subtitle logic -->
+	<script type="text/javascript" src="./subtitle.js"></script>
+
+</head>
+
+<body ng-app="UnderTheBus">
+  <div>
+    <div class="text-center">
+       <div ng-controller="subtitle">
+          <h1>UnderTheBus</h1>
+
+          <div class = "lead">{{ test }}</div>
+
+      </div>
+    </div>
+
+		<div class="navbar">
+      <div class="navbar-inner"> 
+				<div class = "text-center">
+						<h3>Map Goes Here</h3>
+				</div>
+      </div>
+    </div> 
+
+		<div ui-view></div>        
+
+  </div>
+
+</body>
+</html>
+

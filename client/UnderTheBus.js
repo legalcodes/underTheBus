@@ -5,7 +5,7 @@ UnderTheBus.config(function($stateProvider, $urlRouterProvider){
 
 		$stateProvider
 				.state('viewMap', {
-						url: './viewMap',
+						url: '/viewMap',
 						templateUrl: 'viewMap.html',
 						controller: 'mapController'
 				});
@@ -17,5 +17,6 @@ UnderTheBus.controller('mapController', ['$scope', 'MapFactory', function($scope
 
 
 UnderTheBus.factory('MapFactory', ['$http', function($http){
-		
+	return {};
 }]);
+

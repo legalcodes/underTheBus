@@ -19,5 +19,4 @@ UnderTheBus.controller('subtitle', ['$scope', function($scope){
 
   $scope.randomize();
 
-
 }]);

@@ -21,34 +21,24 @@
   <script type="text/javascript" src="UnderTheBus.js"></script>
   <script type="text/javascript" src="subtitle.js"></script>
 
+  <!-- D3 -->
+  <script type="text/javascript" src="d3.js"></script>
+
   <!-- Subtitle logic -->
 	<script type="text/javascript" src="./subtitle.js"></script>
+
+  <title>Under The Bus</title>
 
 </head>
 
 <body ng-app="UnderTheBus">
-  <div>
-    <div class="text-center">
-       <div ng-controller="subtitle">
-          <h1>UnderTheBus</h1>
-
-          <div class = "lead">{{ test }}</div>
-
-      </div>
-    </div>
-
-		<div class="navbar">
-      <div class="navbar-inner"> 
-				<div class = "text-center">
-						<h3>Map Goes Here</h3>
-				</div>
-      </div>
-    </div> 
-
-		<div ui-view></div>        
-
-  </div>
-
+	<div class="text-center">
+			<div ng-controller="subtitle">
+				<h1>UnderTheBus</h1>
+				<div class="lead">{{ test }}</div>
+		</div>
+	</div>
+	<div ui-view></div>        
 </body>
 </html>
 

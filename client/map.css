@@ -1,0 +1,13 @@
+path {
+        stroke: black;
+        stroke-width: 0.5px;
+        fill: red;
+      }
+svg {
+		fill: red;
+		background-color: pink;
+}
+
+.hippy {
+		fill: red;
+}

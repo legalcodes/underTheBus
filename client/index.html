@@ -3,35 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <title>UnderTheBus</title>
-
   <!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
   <!-- My CSS -->
   <link src="style.css"></script>
-
-
+  <link src="map.css"></script>
 	<!-- Angular -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-
   <!-- Angular UI Router -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.0/angular-ui-router.min.js"></script>
-
-
-  <script type="text/javascript" src="UnderTheBus.js"></script>
-  <script type="text/javascript" src="subtitle.js"></script>
-
   <!-- D3 -->
   <script type="text/javascript" src="d3.js"></script>
-
-  <!-- Subtitle logic -->
-	<script type="text/javascript" src="./subtitle.js"></script>
-
-  <title>Under The Bus</title>
+	<script src="//d3js.org/topojson.v1.min.js"></script>
+  <!-- Client JS -->
+  <script type="text/javascript" src="UnderTheBus.js"></script>
+  <script type="text/javascript" src="subtitle.js"></script>
 
 </head>
 
 <body ng-app="UnderTheBus">
+
 	<div class="text-center">
 			<div ng-controller="subtitle">
 				<h1>UnderTheBus</h1>
@@ -39,6 +30,41 @@
 		</div>
 	</div>
 	<div ui-view></div>        
+	<script>
+		var width = 900,
+				height = 600;
+
+		var svg = d3.select("body").append("svg")
+					.attr("width", width)
+					.attr("height", height);
+
+		console.log('getting here');
+
+var projection = d3.geo.mercator()
+    .center([-122.433701, 37.767683])
+    .scale(200000)
+    .translate([width / 2, height / 2]);
+
+    var path = d3.geo.path()
+		  .projection(projection);
+		    
+
+		d3.json('./sfmaps/neighborhoods.json', function(arteries){
+  		console.log(arteries);
+		    svg.selectAll("path")
+           .data(arteries.features)
+           .enter()
+           .append("path")
+           .attr("d", path)
+		       .attr("class", "hippy");
+		});
+
+	</script>
+	<style>
+		.hippy {
+		   fill: red;
+		   stroke: black;
+		}
+	</style>
 </body>
 </html>
-

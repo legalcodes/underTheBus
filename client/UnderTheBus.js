@@ -31,17 +31,15 @@ var UnderTheBus = angular.module('UnderTheBus', ['ui.router'])
 							.attr("class", "hippy");
 
 						var aa = [ -122.36713, 37.72889 ];
-						console.log('projection log: ', projection(aa));
 
 						// add circles to svg
 						svg.selectAll("circle")
 							.data([aa, aa ]).enter()
 							.append("circle")
-							.attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+							.attr("cx", function (d) { return projection(d)[0]; })
 							.attr("cy", function (d) { return projection(d)[1]; })
-							.attr("r", "28px")
+							.attr("r", "8px")
 							.attr("fill", "blue");
-
 					});
 				}
 			};
@@ -59,33 +57,48 @@ UnderTheBus.config(function($stateProvider, $urlRouterProvider){
 				});
 });
 
+
 UnderTheBus.controller('mapController', ['$scope', 'MapFactory', function($scope, MapFactory){
-	$scope.data = [];
-  console.log('Data from NextBus: ', MapFactory.getLocs());
+	$scope.vehicles = [];
+  $scope.getVehicles = function(){
+		MapFactory.getLocs()
+			.then(function(data){
+				for (var i = 0; i < data.length; i++){
+					$scope.vehicles.push(data[i]);
+				}
+				console.log('$scope.vehicles: ', $scope.vehicles);
+			});
+	};
+	$scope.getVehicles();
 }]);
+
 
 
 UnderTheBus.factory('MapFactory', ['$http', function($http){
 	return {
 		getLocs: function(){
-			return {};
-//			return $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni')
-/*				.then(function(res){
-					var extracted = {};
+			return $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni')
+				.then(function(res){
+					var extracted = [];
 					var parser = new DOMParser();
 					var xmlDoc = parser.parseFromString(res.data, "text/xml");
 					// documentElement always represents the root node
 					var x = xmlDoc.documentElement.childNodes;
+
 					for (var i = 0; i < x.length; i++){
-						// set id to vehicle id
 						if (x[i].attributes && x[i].attributes[3]){
 							var vehicle = x[i].attributes;
 							// 3 = lat, 4 = lon
-							extracted[vehicle[0].nodeValue] = [vehicle[3].nodeValue, vehicle[4].nodeValue];
-							console.log(extracted[vehicle[0].nodeValue]);
+							var triple = [
+								vehicle[0].nodeValue,
+								vehicle[4].nodeValue,
+								vehicle[3].nodeValue
+							];
+							extracted.push(triple);
 						}
 					}
-			}); */
+					return extracted;
+			});
 		}
 	};
 }]);

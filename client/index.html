@@ -49,7 +49,7 @@ var projection = d3.geo.mercator()
 		  .projection(projection);
 		    
 
-		d3.json('./sfmaps/neighborhoods.json', function(arteries){
+		d3.json('./sfmaps/streets.json', function(arteries){
   		console.log(arteries);
 		    svg.selectAll("path")
            .data(arteries.features)

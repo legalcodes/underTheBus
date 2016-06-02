@@ -22,15 +22,27 @@ var UnderTheBus = angular.module('UnderTheBus', ['ui.router'])
 					var path = d3.geo.path()
 								.projection(projection);
 
-					d3.json('./sfmaps/streets.json', function(arteries){
+					d3.json('./sfmaps/streets.json', function(streets){
 						svg.selectAll("path")
-							.data(arteries.features)
+							.data(streets.features)
 							.enter()
 							.append("path")
 							.attr("d", path)
 							.attr("class", "hippy");
-					});
 
+						var aa = [ -122.36713, 37.72889 ];
+						console.log('projection log: ', projection(aa));
+
+						// add circles to svg
+						svg.selectAll("circle")
+							.data([aa, aa ]).enter()
+							.append("circle")
+							.attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+							.attr("cy", function (d) { return projection(d)[1]; })
+							.attr("r", "28px")
+							.attr("fill", "blue");
+
+					});
 				}
 			};
 		});
@@ -56,8 +68,9 @@ UnderTheBus.controller('mapController', ['$scope', 'MapFactory', function($scope
 UnderTheBus.factory('MapFactory', ['$http', function($http){
 	return {
 		getLocs: function(){
-			return $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni')
-				.then(function(res){
+			return {};
+//			return $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni')
+/*				.then(function(res){
 					var extracted = {};
 					var parser = new DOMParser();
 					var xmlDoc = parser.parseFromString(res.data, "text/xml");
@@ -67,13 +80,12 @@ UnderTheBus.factory('MapFactory', ['$http', function($http){
 						// set id to vehicle id
 						if (x[i].attributes && x[i].attributes[3]){
 							var vehicle = x[i].attributes;
-//							console.log(vehicle);
 							// 3 = lat, 4 = lon
 							extracted[vehicle[0].nodeValue] = [vehicle[3].nodeValue, vehicle[4].nodeValue];
 							console.log(extracted[vehicle[0].nodeValue]);
 						}
 					}
-			});
+			}); */
 		}
 	};
 }]);

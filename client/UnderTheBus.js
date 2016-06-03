@@ -5,7 +5,8 @@ var UnderTheBus = angular.module('UnderTheBus', ['ui.router'])
 				restrict: 'E',
 				replace: true,
 				template: '<div id="map"></div>',
-				link: function (scope, element, attrs) {
+				scope: true,
+				link: function ($scope, element, attrs) {
 
 					var width = 900,
 							height = 600;
@@ -30,16 +31,41 @@ var UnderTheBus = angular.module('UnderTheBus', ['ui.router'])
 							.attr("d", path)
 							.attr("class", "hippy");
 
+            // test coordinates
 						var aa = [ -122.36713, 37.72889 ];
 
-						// add circles to svg
-						svg.selectAll("circle")
-							.data([aa, aa ]).enter()
-							.append("circle")
-							.attr("cx", function (d) { return projection(d)[0]; })
-							.attr("cy", function (d) { return projection(d)[1]; })
-							.attr("r", "8px")
-							.attr("fill", "blue");
+						var appender = function(){
+							// DATA JOIN
+							// Join new data with old elements, if any.
+							var circle = svg.selectAll('circle')
+										.data($scope.vehicles);
+
+							// UPDATE
+							// Update old elements as needed.
+							circle.attr("class", "update")
+							  .transition()
+							  .attr('cx', function(d) { return projection(d)[0]; })
+							  .attr('cy', function(d) { return projection(d)[1]; });
+
+							// ENTER
+							// Create new elements as needed.
+							circle.enter().append("circle")
+								.attr("class", "enter")
+								.attr("cx", function (d) { return projection(d)[0]; })
+								.attr("cy", function (d) { return projection(d)[1]; })
+								.attr("r", "3px")
+								.attr("fill", "red");
+
+							// ENTER + UPDATE
+							// Appending to the enter selection expands the update selection to include
+							// entering elements; so, operations on the update selection after appending to
+							// the enter selection will apply to both entering and updating nodes.
+
+							// EXIT
+							// Remove old elements as needed.
+							circle.exit().remove();
+						};
+						setInterval(appender, 7000);
 					});
 				}
 			};
@@ -60,16 +86,20 @@ UnderTheBus.config(function($stateProvider, $urlRouterProvider){
 
 UnderTheBus.controller('mapController', ['$scope', 'MapFactory', function($scope, MapFactory){
 	$scope.vehicles = [];
+
   $scope.getVehicles = function(){
 		MapFactory.getLocs()
 			.then(function(data){
+				$scope.vehicles = [];
+				console.log('Cleared vehicles: ', $scope.vehicles);
 				for (var i = 0; i < data.length; i++){
 					$scope.vehicles.push(data[i]);
 				}
-				console.log('$scope.vehicles: ', $scope.vehicles);
+				console.log('Populated vehicles: ', $scope.vehicles);
 			});
 	};
-	$scope.getVehicles();
+
+	setInterval($scope.getVehicles, 15000);
 }]);
 
 
@@ -89,12 +119,11 @@ UnderTheBus.factory('MapFactory', ['$http', function($http){
 						if (x[i].attributes && x[i].attributes[3]){
 							var vehicle = x[i].attributes;
 							// 3 = lat, 4 = lon
-							var triple = [
-								vehicle[0].nodeValue,
+							var tuple = [
 								vehicle[4].nodeValue,
 								vehicle[3].nodeValue
 							];
-							extracted.push(triple);
+							extracted.push(tuple);
 						}
 					}
 					return extracted;

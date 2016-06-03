@@ -1,4 +1,8 @@
 .hippy {
-		fill: red;
 		stroke: black;
+}
+
+svg {
+		margin: 0 auto;
+		display: block;
 }

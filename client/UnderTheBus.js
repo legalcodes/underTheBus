@@ -37,7 +37,6 @@ var UnderTheBus = angular.module('UnderTheBus', ['ui.router'])
 								var appender = function(){
 									if ($scope.vehicles.length !== 0){
 										// remove spinner
-										console.log('trying to remove spinner...');
 										d3.selectAll('img')
 										  .remove();
 									}
@@ -97,11 +96,9 @@ UnderTheBus.controller('mapController', ['$scope', 'MapFactory', function($scope
 		MapFactory.getLocs()
 			.then(function(data){
 				$scope.vehicles = [];
-				console.log('Cleared vehicles: ', $scope.vehicles);
 				for (var i = 0; i < data.length; i++){
 					$scope.vehicles.push(data[i]);
 				}
-				console.log('Populated vehicles: ', $scope.vehicles);
 			});
 	};
 

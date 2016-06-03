@@ -40,7 +40,6 @@ var UnderTheBus = angular.module('UnderTheBus', ['ui.router'])
 										console.log('trying to remove spinner...');
 										d3.selectAll('img')
 										  .remove();
-
 									}
 									// DATA JOIN
 									// Join new data with old elements, if any.

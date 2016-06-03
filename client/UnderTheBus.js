@@ -11,62 +11,69 @@ var UnderTheBus = angular.module('UnderTheBus', ['ui.router'])
 					var width = 900,
 							height = 600;
 
-					var svg = d3.select("body").append("svg")
-								.attr("width", width)
-								.attr("height", height);
+						var svg = d3.select("body").append("svg")
+										.attr("width", width)
+										.attr("height", height);
 
-					var projection = d3.geo.mercator()
-								.center([-122.433701, 37.767683])
-								.scale(200000)
-								.translate([width / 2, height / 2]);
+						var projection = d3.geo.mercator()
+										.center([-122.433701, 37.767683])
+										.scale(200000)
+										.translate([width / 2, height / 2]);
 
-					var path = d3.geo.path()
-								.projection(projection);
+						var path = d3.geo.path()
+										.projection(projection);
 
-					d3.json('./sfmaps/streets.json', function(streets){
-						svg.selectAll("path")
-							.data(streets.features)
-							.enter()
-							.append("path")
-							.attr("d", path)
-							.attr("class", "hippy");
+						d3.json('./sfmaps/streets.json', function(streets){
+								svg.selectAll("path")
+								.data(streets.features)
+								.enter()
+								.append("path")
+								.attr("d", path)
+								.attr("class", "hippy");
 
-            // test coordinates
-						var aa = [ -122.36713, 37.72889 ];
+								// test coordinates
+								var aa = [ -122.36713, 37.72889 ];
 
-						var appender = function(){
-							// DATA JOIN
-							// Join new data with old elements, if any.
-							var circle = svg.selectAll('circle')
-										.data($scope.vehicles);
+								var appender = function(){
+									if ($scope.vehicles.length !== 0){
+										// remove spinner
+										console.log('trying to remove spinner...');
+										d3.selectAll('img')
+										  .remove();
 
-							// UPDATE
-							// Update old elements as needed.
-							circle.attr("class", "update")
-							  .transition()
-							  .attr('cx', function(d) { return projection(d)[0]; })
-							  .attr('cy', function(d) { return projection(d)[1]; });
+									}
+									// DATA JOIN
+									// Join new data with old elements, if any.
+									var circle = svg.selectAll('circle')
+										 .data($scope.vehicles);
 
-							// ENTER
-							// Create new elements as needed.
-							circle.enter().append("circle")
-								.attr("class", "enter")
-								.attr("cx", function (d) { return projection(d)[0]; })
-								.attr("cy", function (d) { return projection(d)[1]; })
-								.attr("r", "3px")
-								.attr("fill", "red");
+										// UPDATE
+										// Update old elements as needed.
+										circle.attr("class", "update")
+												.transition()
+												.attr('cx', function(d) { return projection(d)[0]; })
+												.attr('cy', function(d) { return projection(d)[1]; });
 
-							// ENTER + UPDATE
-							// Appending to the enter selection expands the update selection to include
-							// entering elements; so, operations on the update selection after appending to
-							// the enter selection will apply to both entering and updating nodes.
+										// ENTER
+										// Create new elements as needed.
+										circle.enter().append("circle")
+												.attr("class", "enter")
+												.attr("cx", function (d) { return projection(d)[0]; })
+												.attr("cy", function (d) { return projection(d)[1]; })
+												.attr("r", "3px")
+												.attr("fill", "red");
 
-							// EXIT
-							// Remove old elements as needed.
-							circle.exit().remove();
-						};
-						setInterval(appender, 7000);
-					});
+										// ENTER + UPDATE
+										// Appending to the enter selection expands the update selection to include
+										// entering elements; so, operations on the update selection after appending to
+										// the enter selection will apply to both entering and updating nodes.
+
+										// EXIT
+										// Remove old elements as needed.
+										circle.exit().remove();
+								};
+								setInterval(appender, 3000);
+						});
 				}
 			};
 		});
